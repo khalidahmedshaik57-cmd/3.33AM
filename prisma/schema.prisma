@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  orders    Order[]
+}
+
+model Design {
+  id          String          @id @default(cuid())
+  slug        String          @unique
+  name        String
+  description String
+  category    String
+  collection  String
+  price       Int
+  images      String[]
+  featured    Boolean         @default(false)
+  published   Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  variants    DesignVariant[]
+
+  @@index([published, category, collection])
+}
+
+model DesignVariant {
+  id        String      @id @default(cuid())
+  designId  String
+  size      String
+  sku       String      @unique
+  stock     Int         @default(0)
+  design    Design      @relation(fields: [designId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]
+
+  @@unique([designId, size])
+}
+
+model Order {
+  id                     String      @id @default(cuid())
+  userId                 String?
+  email                  String
+  name                   String
+  phone                  String
+  address                String
+  city                   String
+  postalCode             String
+  country                String
+  subtotal               Int
+  shipping               Int
+  total                  Int
+  status                 OrderStatus @default(PENDING)
+  paymentSessionId       String?     @unique
+  paymentIntentId        String?     @unique
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+  user                   User?       @relation(fields: [userId], references: [id])
+  items                  OrderItem[]
+
+  @@index([email, createdAt])
+  @@index([status, createdAt])
+}
+
+model OrderItem {
+  id        String        @id @default(cuid())
+  orderId   String
+  variantId String
+  name      String
+  size      String
+  quantity  Int
+  unitPrice Int
+  order     Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variant   DesignVariant @relation(fields: [variantId], references: [id])
+}
