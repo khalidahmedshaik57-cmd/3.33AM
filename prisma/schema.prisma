@@ -17,6 +17,15 @@ enum OrderStatus {
   REFUNDED
 }
 
+enum PaymentMethod {
+  CREDIT_CARD
+  DEBIT_CARD
+  UPI
+  COD
+  NET_BANKING
+  WALLET_BNPL
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -44,37 +53,39 @@ model Design {
 }
 
 model DesignVariant {
-  id        String      @id @default(cuid())
-  designId  String
-  size      String
-  sku       String      @unique
-  stock     Int         @default(0)
-  design    Design      @relation(fields: [designId], references: [id], onDelete: Cascade)
+  id         String      @id @default(cuid())
+  designId   String
+  size       String
+  sku        String      @unique
+  stock      Int         @default(0)
+  design     Design      @relation(fields: [designId], references: [id], onDelete: Cascade)
   orderItems OrderItem[]
 
   @@unique([designId, size])
 }
 
 model Order {
-  id                     String      @id @default(cuid())
-  userId                 String?
-  email                  String
-  name                   String
-  phone                  String
-  address                String
-  city                   String
-  postalCode             String
-  country                String
-  subtotal               Int
-  shipping               Int
-  total                  Int
-  status                 OrderStatus @default(PENDING)
-  paymentSessionId       String?     @unique
-  paymentIntentId        String?     @unique
-  createdAt              DateTime    @default(now())
-  updatedAt              DateTime    @updatedAt
-  user                   User?       @relation(fields: [userId], references: [id])
-  items                  OrderItem[]
+  id               String        @id @default(cuid())
+  userId           String?
+  email            String
+  name             String
+  phone            String
+  address          String
+  city             String
+  state            String        @default("")
+  postalCode       String
+  country          String
+  paymentMethod    PaymentMethod @default(CREDIT_CARD)
+  subtotal         Int
+  shipping         Int
+  total            Int
+  status           OrderStatus   @default(PENDING)
+  paymentSessionId String?       @unique
+  paymentIntentId  String?       @unique
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  user             User?         @relation(fields: [userId], references: [id])
+  items            OrderItem[]
 
   @@index([email, createdAt])
   @@index([status, createdAt])

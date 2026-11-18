@@ -7,10 +7,12 @@ export const runtime = "nodejs";
 const SHIPPING = 150;
 
 export async function POST(request: Request) {
-  const stripe = getStripe();
-  if (!stripe) return NextResponse.json({ error: "Online payment is not configured yet." }, { status: 503 });
   const parsed = orderSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Please check your delivery details and bag.", details: parsed.error.flatten() }, { status: 400 });
+  const stripe = parsed.data.paymentMethod === "COD" ? null : getStripe();
+  if (parsed.data.paymentMethod !== "COD" && !stripe) {
+    return NextResponse.json({ error: "Online payment is not configured yet." }, { status: 503 });
+  }
 
   const lineQuantities = new Map<string, number>();
   for (const item of parsed.data.items) {
@@ -51,8 +53,10 @@ export async function POST(request: Request) {
           phone: parsed.data.phone,
           address: parsed.data.address,
           city: parsed.data.city,
+          state: parsed.data.state,
           postalCode: parsed.data.postalCode,
           country: parsed.data.country,
+          paymentMethod: parsed.data.paymentMethod,
           subtotal,
           shipping,
           total: subtotal + shipping,
@@ -73,6 +77,10 @@ export async function POST(request: Request) {
       return { order, variants };
     });
     orderId = reserved.order.id;
+    if (parsed.data.paymentMethod === "COD") {
+      return NextResponse.json({ orderId, cashOnDelivery: true });
+    }
+    if (!stripe) throw new Error("STRIPE_NOT_CONFIGURED");
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin;
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -94,7 +102,7 @@ export async function POST(request: Request) {
           price_data: { currency: "inr" as const, unit_amount: reserved.order.shipping * 100, product_data: { name: "Shipping" } }
         }] : [])
       ],
-      metadata: { orderId },
+      metadata: { orderId, paymentMethod: parsed.data.paymentMethod },
       success_url: `${siteUrl}/checkout/success?order=${encodeURIComponent(orderId)}`,
       cancel_url: `${siteUrl}/cart`
     });

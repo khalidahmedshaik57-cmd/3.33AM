@@ -9,6 +9,7 @@ type CartContextValue = {
   items: CartItem[];
   count: number;
   subtotal: number;
+  addEvent: number;
   addItem: (item: CartItem) => void;
   setQuantity: (variantId: string, quantity: number) => void;
   removeItem: (variantId: string) => void;
@@ -32,6 +33,7 @@ const storedCartSchema = z.array(z.object({
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [hydrated, setHydrated] = useState(false);
+  const [addEvent, setAddEvent] = useState(0);
 
   useEffect(() => {
     try {
@@ -53,6 +55,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items, hydrated]);
 
   const addItem = useCallback((item: CartItem) => {
+    setAddEvent((current) => current + 1);
     setItems((current) => {
       const existing = current.find((line) => line.variantId === item.variantId);
       if (!existing) return [...current, item];
@@ -84,12 +87,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
       items,
       count: items.reduce((total, item) => total + item.quantity, 0),
       subtotal: items.reduce((total, item) => total + item.price * item.quantity, 0),
+      addEvent,
       addItem,
       setQuantity,
       removeItem,
       clearCart
     }),
-    [items, addItem, setQuantity, removeItem, clearCart]
+    [items, addEvent, addItem, setQuantity, removeItem, clearCart]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import DesignCard from "@/components/shop/DesignCard";
+import FloatingTryOn from "@/components/shop/FloatingTryOn";
 import { designs } from "@/lib/catalog";
 import type { DesignWithVariants } from "@/types";
 
@@ -17,7 +18,7 @@ export default function HomePage() {
   }, []);
   const featured = catalog.filter((design) => design.featured).slice(0, 4);
   return (
-    <>
+    <div className="home-page">
       <section className="hero">
         <div className="hero-content">
           <p className="eyebrow">Independent essentials · Est. 03:33</p>
@@ -46,6 +47,7 @@ export default function HomePage() {
         </div>
         <div className="product-grid">{catalog.slice(0, 4).map((design) => <DesignCard key={design.id} design={design} />)}</div>
       </section>
-    </>
+      <FloatingTryOn designs={catalog} />
+    </div>
   );
 }

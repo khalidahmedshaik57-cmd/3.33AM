@@ -8,11 +8,18 @@ const lineItemSchema = z.object({
 export const orderSchema = z.object({
   name: z.string().trim().min(2).max(100),
   email: z.string().trim().email().max(254),
-  phone: z.string().trim().min(7).max(30),
+  phone: z.string().trim()
+    .regex(/^\+?[0-9\s()-]+$/)
+    .refine((value) => {
+      const digits = value.replace(/\D/g, "").length;
+      return digits >= 7 && digits <= 15;
+    }),
   address: z.string().trim().min(5).max(200),
   city: z.string().trim().min(2).max(100),
-  postalCode: z.string().trim().min(3).max(20),
+  state: z.string().trim().min(2).max(100),
+  postalCode: z.string().trim().regex(/^\d{6}$/),
   country: z.string().trim().min(2).max(80),
+  paymentMethod: z.enum(["CREDIT_CARD", "DEBIT_CARD", "UPI", "COD", "NET_BANKING", "WALLET_BNPL"]),
   items: z.array(lineItemSchema).min(1).max(30)
 });
 

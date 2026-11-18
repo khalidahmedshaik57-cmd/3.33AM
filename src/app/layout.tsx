@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
+import { ShopperProvider } from "@/context/ShopperContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">
-      <body><CartProvider><Navbar /><main>{children}</main><Footer /></CartProvider></body>
+      <body><CartProvider><ShopperProvider><Navbar /><main>{children}</main><Footer /></ShopperProvider></CartProvider></body>
     </html>
   );
 }

@@ -35,10 +35,10 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   if (!parsed.success) return NextResponse.json({ error: "Invalid order status." }, { status: 400 });
   const { id } = await params;
   try {
-    const existing = await prisma.order.findUnique({ where: { id }, select: { status: true } });
+    const existing = await prisma.order.findUnique({ where: { id }, select: { status: true, paymentMethod: true } });
     if (!existing) return NextResponse.json({ error: "Order not found." }, { status: 404 });
     const allowedFrom: Record<string, string[]> = {
-      PROCESSING: ["PAID"],
+      PROCESSING: existing.paymentMethod === "COD" ? ["PENDING", "PAID"] : ["PAID"],
       SHIPPED: ["PROCESSING"],
       DELIVERED: ["SHIPPED"]
     };

@@ -11,8 +11,10 @@ export default function ProductDetails({ design }: { design: DesignWithVariants 
   const [selected, setSelected] = useState("");
   const [message, setMessage] = useState("");
   const { addItem } = useCart();
+  const selectedVariant = design.variants.find((item) => item.id === selected);
+  const hasAvailableSizes = design.variants.some((item) => item.stock > 0);
   function addToBag() {
-    const variant = design.variants.find((item) => item.id === selected);
+    const variant = selectedVariant;
     if (!variant) {
       setMessage("Choose a size to continue.");
       return;
@@ -38,7 +40,14 @@ export default function ProductDetails({ design }: { design: DesignWithVariants 
       <p className="detail-description">{design.description}</p>
       <div className="size-label-row"><p className="field-label">Choose your size</p><SizeChartModal /></div>
       <SizeSelector variants={design.variants} selected={selected} onSelect={setSelected} />
-      <button className="button button-dark add-button" onClick={addToBag}>Add to bag — {formatPrice(design.price)}</button>
+      <p className={`stock-message detail-stock ${selectedVariant?.stock === 0 ? "stock-out" : selectedVariant && selectedVariant.stock <= 3 ? "stock-low" : ""}`} aria-live="polite">
+        {selectedVariant
+          ? selectedVariant.stock < 1
+            ? "Out of Stock"
+            : `${selectedVariant.stock <= 3 ? "Only " : ""}${selectedVariant.stock} ${selectedVariant.stock === 1 ? "piece" : "pieces"} available in Size ${selectedVariant.size}`
+          : hasAvailableSizes ? "Select a size to check availability" : "Out of Stock"}
+      </p>
+      <button className="button button-dark add-button" onClick={addToBag} disabled={!selectedVariant || selectedVariant.stock < 1}>Add to bag — {formatPrice(design.price)}</button>
       {message && <p className={message.startsWith("Choose") ? "inline-error" : "product-category"} role="status">{message}</p>}
       <p className="product-note">Free shipping on orders over ₹5,000. Easy exchanges within 14 days.</p>
       <p className="product-note">Fabric & care<br />Midweight cotton. Machine wash cold with similar colours.</p>
