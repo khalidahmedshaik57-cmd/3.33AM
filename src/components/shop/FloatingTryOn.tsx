@@ -186,18 +186,18 @@ export default function FloatingTryOn({ designs }: { designs: DesignWithVariants
             role="dialog"
             aria-modal="true"
             aria-labelledby="floating-try-on-title"
-            className="fixed bottom-24 right-4 z-50 flex max-h-[calc(100vh-7.5rem)] w-[min(24rem,calc(100vw-2rem))] flex-col overflow-hidden border border-white/15 bg-[#111110] text-[#f4f1eb] shadow-2xl sm:right-6"
+            className="fixed bottom-24 right-4 z-50 flex max-h-[calc(100vh-7.5rem)] w-[min(24rem,calc(100vw-2rem))] flex-col overflow-hidden border border-white/15 bg-[#111111] text-white shadow-2xl sm:right-6"
           >
             <header className="flex items-start justify-between gap-4 border-b border-white/15 px-5 py-4">
               <div>
-                <p className="mb-1 text-[9px] uppercase tracking-[0.2em] text-[#aaa8a1]">The fitting room</p>
+                <p className="mb-1 text-[9px] uppercase tracking-[0.2em] text-neutral-400">The fitting room</p>
                 <h2 id="floating-try-on-title" className="text-xl font-medium tracking-[-0.05em]">AI Virtual Try-On</h2>
               </div>
               <button
                 type="button"
                 onClick={closeDrawer}
                 aria-label="Close try-on"
-                className="grid h-8 w-8 place-items-center text-xl text-[#aaa8a1] transition hover:text-white"
+                className="grid h-8 w-8 place-items-center text-xl text-neutral-400 transition hover:text-white"
               >
                 ×
               </button>
@@ -205,7 +205,7 @@ export default function FloatingTryOn({ designs }: { designs: DesignWithVariants
 
             <div className="overflow-y-auto p-5">
               {designs.length > 0 ? (
-                <label className="mb-3 block text-[9px] uppercase tracking-[0.16em] text-[#aaa8a1]">
+                <label className="mb-3 block text-[9px] uppercase tracking-[0.16em] text-neutral-400">
                   Choose a garment
                   <select
                     value={design?.id ?? ""}
@@ -213,22 +213,22 @@ export default function FloatingTryOn({ designs }: { designs: DesignWithVariants
                       setSelectedId(event.target.value);
                       setMessage("");
                     }}
-                    className="mt-2 block h-10 w-full border border-white/20 bg-[#1d1d1b] px-3 text-xs normal-case tracking-normal text-white outline-none focus:border-[#d2ff3a]"
+                    className="mt-2 block h-10 w-full border border-white/20 bg-[#1a1a1a] px-3 text-xs normal-case tracking-normal text-white outline-none focus:border-white"
                   >
                     {designs.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
                   </select>
                 </label>
               ) : (
-                <p className="mb-3 text-xs text-[#aaa8a1]">No garments are available to try on right now.</p>
+                <p className="mb-3 text-xs text-neutral-400">No garments are available to try on right now.</p>
               )}
 
-              <div className="relative aspect-[4/3] overflow-hidden bg-[#222220]">
+              <div className="relative aspect-[4/3] overflow-hidden bg-[#222222]">
                 {snapshot ? (
                   <img src={snapshot} alt="Your photo for the virtual try-on" className="h-full w-full object-cover" />
                 ) : stream ? (
                   <video ref={videoRef} autoPlay muted playsInline aria-label="Live camera preview" className="h-full w-full object-cover" />
                 ) : (
-                  <div className="flex h-full flex-col items-center justify-center gap-3 px-8 text-center text-[#aaa8a1]">
+                  <div className="flex h-full flex-col items-center justify-center gap-3 px-8 text-center text-neutral-400">
                     <svg aria-hidden="true" viewBox="0 0 48 48" className="h-9 w-9 fill-none stroke-current" strokeWidth="1">
                       <rect x="5" y="12" width="38" height="27" rx="2" />
                       <circle cx="24" cy="25" r="8" />
@@ -273,7 +273,7 @@ export default function FloatingTryOn({ designs }: { designs: DesignWithVariants
                   type="button"
                   onClick={stream ? () => { stopCamera(); setMessage(""); } : startCamera}
                   disabled={cameraBusy}
-                  className="min-h-10 border border-white/30 px-3 text-[9px] uppercase tracking-[0.12em] transition hover:bg-white hover:text-[#111110] disabled:cursor-wait disabled:opacity-50"
+                  className="min-h-10 border border-white/30 px-3 text-[9px] uppercase tracking-[0.12em] transition hover:bg-white hover:text-black disabled:cursor-wait disabled:opacity-50"
                 >
                   {cameraBusy ? "Connecting…" : stream ? "Turn camera off" : "Use camera"}
                 </button>
@@ -281,14 +281,14 @@ export default function FloatingTryOn({ designs }: { designs: DesignWithVariants
                   type="button"
                   onClick={capturePhoto}
                   disabled={!stream}
-                  className="min-h-10 bg-[#f4f1eb] px-3 text-[9px] uppercase tracking-[0.12em] text-[#111110] transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
+                  className="min-h-10 bg-white px-3 text-[9px] uppercase tracking-[0.12em] text-black transition hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Capture photo
                 </button>
                 <button
                   type="button"
                   onClick={() => photoInputRef.current?.click()}
-                  className="min-h-10 border border-white/30 px-3 text-[9px] uppercase tracking-[0.12em] transition hover:bg-white hover:text-[#111110]"
+                  className="min-h-10 border border-white/30 px-3 text-[9px] uppercase tracking-[0.12em] transition hover:bg-white hover:text-black"
                 >
                   Upload photo
                 </button>
@@ -297,33 +297,33 @@ export default function FloatingTryOn({ designs }: { designs: DesignWithVariants
 
               <div className="mt-4 flex items-center justify-between gap-3 border border-white/15 p-3">
                 <div>
-                  <p className="text-[8px] uppercase tracking-[0.15em] text-[#aaa8a1]">AI size recommendation</p>
+                  <p className="text-[8px] uppercase tracking-[0.15em] text-neutral-400">AI size recommendation</p>
                   {recommendedVariant ? (
                     <p className="mt-1 text-sm">
                       Recommended Size: <span className="font-semibold">{recommendedVariant.size}</span> — Regular Fit
                     </p>
                   ) : (
-                    <p className="mt-1 text-xs text-[#aaa8a1]">No sizes currently available</p>
+                    <p className="mt-1 text-xs text-neutral-400">No sizes currently available</p>
                   )}
                 </div>
                 {recommendedVariant && (
-                  <span className="shrink-0 border border-[#d2ff3a]/50 px-2 py-1 text-[8px] uppercase tracking-[0.1em] text-[#d2ff3a]">
+                  <span className="shrink-0 border border-white/50 px-2 py-1 text-[8px] uppercase tracking-[0.1em] text-neutral-200">
                     Suggested
                   </span>
                 )}
               </div>
-              <p className="mt-3 text-[9px] leading-4 text-[#aaa8a1]">
+              <p className="mt-3 text-[9px] leading-4 text-neutral-400">
                 This visual overlay and size suggestion are estimates, not a fit guarantee. Your photo stays in this browser.
               </p>
               <button
                 type="button"
                 onClick={addRecommendedSize}
                 disabled={!design || !recommendedVariant || !garmentImage}
-                className="mt-4 min-h-11 w-full bg-[#d2ff3a] px-4 text-[9px] font-medium uppercase tracking-[0.13em] text-[#111110] transition hover:bg-[#e1ff80] disabled:cursor-not-allowed disabled:opacity-50"
+                className="mt-4 min-h-11 w-full bg-white px-4 text-[9px] font-medium uppercase tracking-[0.13em] text-black transition hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Add to Cart
               </button>
-              {message && <p className="mt-3 text-[10px] leading-4 text-[#d2ff3a]" role="status">{message}</p>}
+              {message && <p className="mt-3 text-[10px] leading-4 text-neutral-300" role="status">{message}</p>}
             </div>
           </section>
         </>
@@ -334,7 +334,7 @@ export default function FloatingTryOn({ designs }: { designs: DesignWithVariants
         onClick={openDrawer}
         aria-haspopup="dialog"
         aria-expanded={isOpen}
-        className="fixed bottom-6 right-6 z-50 inline-flex min-h-12 items-center gap-2 bg-[#111110] px-5 text-[10px] font-medium uppercase tracking-[0.12em] text-white shadow-xl transition hover:bg-[#30302d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d2ff3a]"
+        className="fixed bottom-6 right-6 z-50 inline-flex min-h-12 items-center gap-2 bg-[#111111] px-5 text-[10px] font-medium uppercase tracking-[0.12em] text-white shadow-xl transition hover:bg-[#303030] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
       >
         <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current" strokeWidth="1.6">
           <path d="M4 8.5h3l1.5-2h7L17 8.5h3v10H4z" />

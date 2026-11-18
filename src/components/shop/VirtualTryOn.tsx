@@ -98,22 +98,22 @@ export default function VirtualTryOn({ design }: { design: DesignWithVariants })
   }
 
   return (
-    <section className="w-full bg-[#111110] p-5 text-[#f4f1eb] sm:p-8" aria-labelledby="virtual-try-on-title">
+    <section className="w-full bg-[#111111] p-5 text-white sm:p-8" aria-labelledby="virtual-try-on-title">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-[#aaa8a1]">The fitting room</p>
+          <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-neutral-400">The fitting room</p>
           <h2 id="virtual-try-on-title" className="text-3xl font-medium tracking-[-0.06em]">
             Virtual try-on
           </h2>
         </div>
-        <span className="border border-white/20 px-3 py-2 text-[9px] uppercase tracking-[0.16em] text-[#aaa8a1]">
+        <span className="border border-white/20 px-3 py-2 text-[9px] uppercase tracking-[0.16em] text-neutral-400">
           Simulated preview
         </span>
       </div>
 
       <div className="grid gap-6 md:grid-cols-[minmax(0,1.3fr)_minmax(220px,0.7fr)]">
         <div>
-          <div className="relative mx-auto aspect-[4/5] max-h-[560px] overflow-hidden bg-[#222220]">
+          <div className="relative mx-auto aspect-[4/5] max-h-[560px] overflow-hidden bg-[#222222]">
             {snapshot ? (
               <img src={snapshot} alt="Your captured photo" className="h-full w-full object-cover" />
             ) : stream ? (
@@ -126,7 +126,7 @@ export default function VirtualTryOn({ design }: { design: DesignWithVariants })
                 className="h-full w-full object-cover"
               />
             ) : (
-              <div className="flex h-full flex-col items-center justify-center gap-3 px-8 text-center text-[#aaa8a1]">
+              <div className="flex h-full flex-col items-center justify-center gap-3 px-8 text-center text-neutral-400">
                 <svg aria-hidden="true" viewBox="0 0 48 48" className="h-10 w-10 fill-none stroke-current" strokeWidth="1">
                   <rect x="5" y="12" width="38" height="27" rx="2" />
                   <circle cx="24" cy="25" r="8" />
@@ -178,7 +178,7 @@ export default function VirtualTryOn({ design }: { design: DesignWithVariants })
               type="button"
               onClick={toggleCamera}
               disabled={cameraBusy}
-              className="min-h-11 border border-white/35 px-4 text-[10px] uppercase tracking-[0.13em] transition hover:bg-white hover:text-[#111110] disabled:cursor-wait disabled:opacity-50"
+              className="min-h-11 border border-white/35 px-4 text-[10px] uppercase tracking-[0.13em] transition hover:bg-white hover:text-black disabled:cursor-wait disabled:opacity-50"
             >
               {cameraBusy ? "Connecting…" : stream ? "Turn camera off" : "Turn camera on"}
             </button>
@@ -186,7 +186,7 @@ export default function VirtualTryOn({ design }: { design: DesignWithVariants })
               <button
                 type="button"
                 onClick={capturePhoto}
-                className="min-h-11 bg-[#f4f1eb] px-4 text-[10px] uppercase tracking-[0.13em] text-[#111110] transition hover:bg-white"
+                className="min-h-11 bg-white px-4 text-[10px] uppercase tracking-[0.13em] text-black transition hover:bg-neutral-200"
               >
                 Capture photo
               </button>
@@ -195,7 +195,7 @@ export default function VirtualTryOn({ design }: { design: DesignWithVariants })
               <button
                 type="button"
                 onClick={() => setSnapshot("")}
-                className="min-h-11 border border-white/35 px-4 text-[10px] uppercase tracking-[0.13em] transition hover:bg-white hover:text-[#111110]"
+                className="min-h-11 border border-white/35 px-4 text-[10px] uppercase tracking-[0.13em] transition hover:bg-white hover:text-black"
               >
                 Retake photo
               </button>
@@ -205,34 +205,34 @@ export default function VirtualTryOn({ design }: { design: DesignWithVariants })
 
         <div className="flex flex-col justify-between gap-6">
           <div className="border border-white/15 p-5">
-            <p className="text-[10px] uppercase tracking-[0.18em] text-[#aaa8a1]">Your size estimate</p>
+            <p className="text-[10px] uppercase tracking-[0.18em] text-neutral-400">Your size estimate</p>
             {recommendedVariant ? (
               <>
                 <div className="my-5 flex items-center gap-4">
                   <span className="text-6xl font-light tracking-[-0.08em]">{recommendedVariant.size}</span>
-                  <span className="border border-[#d2ff3a]/50 px-2 py-1 text-[9px] uppercase tracking-[0.12em] text-[#d2ff3a]">
+                  <span className="border border-white/50 px-2 py-1 text-[9px] uppercase tracking-[0.12em] text-neutral-200">
                     Recommended
                   </span>
                 </div>
                 <p className="text-sm">Fits like a glove.</p>
-                <p className="mt-3 text-xs leading-5 text-[#aaa8a1]">
+                <p className="mt-3 text-xs leading-5 text-neutral-400">
                   A simulated estimate based on a standard fit profile, not body measurements.
                 </p>
               </>
             ) : (
-              <p className="mt-5 text-sm text-[#aaa8a1]">No sizes are currently available.</p>
+              <p className="mt-5 text-sm text-neutral-400">No sizes are currently available.</p>
             )}
           </div>
 
           <div>
-            <p className="mb-4 text-xs leading-5 text-[#aaa8a1]">
+            <p className="mb-4 text-xs leading-5 text-neutral-400">
               Your camera preview stays in this browser. The overlay is a visual simulation, not a fit guarantee.
             </p>
             <button
               type="button"
               onClick={addRecommendedSize}
               disabled={!recommendedVariant}
-              className="min-h-12 w-full bg-[#d2ff3a] px-4 text-[10px] font-medium uppercase tracking-[0.12em] text-[#111110] transition hover:bg-[#e1ff80] disabled:cursor-not-allowed disabled:opacity-50"
+              className="min-h-12 w-full bg-white px-4 text-[10px] font-medium uppercase tracking-[0.12em] text-black transition hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Add to Cart with AI Size
             </button>
@@ -241,7 +241,7 @@ export default function VirtualTryOn({ design }: { design: DesignWithVariants })
       </div>
 
       {message && (
-        <p className="mt-4 text-xs text-[#d2ff3a]" role="status">
+        <p className="mt-4 text-xs text-neutral-300" role="status">
           {message}
         </p>
       )}
